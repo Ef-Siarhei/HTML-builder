@@ -13,7 +13,7 @@ const { join } = require('path');
       clearDir(filesCopyDir);
       copyDir();
     }
-  })
+  });
 })();
 
 const clearDir = (dir) => {
@@ -22,9 +22,9 @@ const clearDir = (dir) => {
       fs.unlink(join(__dirname, 'files-copy', el.name), err => {
         if (err) throw err;
       });
-    })
+    });
   });
-}
+};
 
 const copyDir = () => {
   const filesDir = join(__dirname, 'files');
@@ -34,6 +34,6 @@ const copyDir = () => {
       const copyFile = join(__dirname, 'files-copy', el.name);
 
       fs.promises.copyFile(file, copyFile);
-    })
-  })
-}
+    });
+  });
+};

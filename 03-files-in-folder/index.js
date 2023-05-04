@@ -9,7 +9,7 @@ fs.promises.readdir(directory, { withFileTypes: true }).then((files) => {
       const fileName = path.parse(el.name).name;
       const fileExt = path.parse(el.name).ext;
       fs.stat(path.join(directory, el.name), (err, stats) => {
-        console.log(fileName + fileExt.replace('.', ' - ') + ' - ' + stats.size)
+        console.log(fileName + fileExt.replace('.', ' - ') + ' - ' + stats.size);
       });
-    })
-})
+    });
+});
