@@ -59,16 +59,16 @@ function createStyleFile() {
 }
 
 function copyDirectory() {
-  const filesCopyDir = join(__dirname, 'project-dist', 'assets');
-  const filesDir = join(__dirname, 'assets');
+  const assetsCopyDir = join(__dirname, 'project-dist', 'assets');
+  const assetsDir = join(__dirname, 'assets');
 
-  fs.access(filesCopyDir, fs.constants.F_OK, (err) => {
+  fs.access(assetsCopyDir, fs.constants.F_OK, (err) => {
     if (err) {
-      fs.promises.mkdir(filesCopyDir, { recursive: true });
-      copyDirFile(filesDir, filesCopyDir);
+      fs.promises.mkdir(assetsCopyDir, { recursive: true });
+      copyDirFile(assetsDir, assetsCopyDir);
     }
     else {
-      copyDirFile(filesDir, filesCopyDir);
+      copyDirFile(assetsDir, assetsCopyDir);
     }
   });
 
