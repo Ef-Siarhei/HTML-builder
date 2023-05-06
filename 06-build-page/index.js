@@ -58,19 +58,18 @@ function createStyleFile() {
   });
 }
 
-function copyDirectory() {
-  const assetsCopyDir = join(__dirname, 'project-dist', 'assets');
+async function copyDirectory() {
   const assetsDir = join(__dirname, 'assets');
+  const assetsCopyDir = join(__dirname, 'project-dist', 'assets');
 
-  fs.access(assetsCopyDir, fs.constants.F_OK, (err) => {
-    if (err) {
-      fs.promises.mkdir(assetsCopyDir, { recursive: true });
-      copyDirFile(assetsDir, assetsCopyDir);
-    }
-    else {
-      copyDirFile(assetsDir, assetsCopyDir);
-    }
-  });
+  await (function deleteDir() {
+    return fs.promises.rm(assetsCopyDir, { recursive: true, force: true });
+  })();
+
+  (function createDir() {
+    fs.promises.mkdir(assetsCopyDir, { recursive: true });
+    copyDirFile(assetsDir, assetsCopyDir);
+  })();
 
   function copyDirFile(dir_from, dir_to) {
     fs.readdir(dir_from, { withFileTypes: true }, (err, files) => {
