@@ -62,14 +62,16 @@ async function copyDirectory() {
   const assetsDir = join(__dirname, 'assets');
   const assetsCopyDir = join(__dirname, 'project-dist', 'assets');
 
-  await (function deleteDir() {
-    return fs.promises.rm(assetsCopyDir, { recursive: true, force: true });
-  })();
+  fs.access(assetsCopyDir, fs.constants.F_OK, (err) => {
+    if (err) {
+      createDir();
+    } else { removeDir(assetsCopyDir); }
+  });
 
-  (function createDir() {
+  function createDir() {
     fs.promises.mkdir(assetsCopyDir, { recursive: true });
     copyDirFile(assetsDir, assetsCopyDir);
-  })();
+  }
 
   function copyDirFile(dir_from, dir_to) {
     fs.readdir(dir_from, { withFileTypes: true }, (err, files) => {
@@ -85,5 +87,27 @@ async function copyDirectory() {
         }
       });
     });
+  }
+
+  function removeDir(path) {
+    (async function delDir() {
+      const files = await fs.promises.readdir(path);
+
+      if (files.length > 0) {
+        files.forEach(function (filename) {
+          if (!filename.includes('.')) {
+            removeDir(path + '/' + filename);
+          } else {
+            fs.promises.unlink(path + '/' + filename);
+          }
+        });
+      }
+
+      if (files.length === 0) {
+        fs.promises.rmdir(path);
+      }
+
+    })();
+    createDir();
   }
 }
